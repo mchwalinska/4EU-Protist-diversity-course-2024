@@ -92,7 +92,7 @@ python3 ../formate_vsearch_output.py -i taxonomy.txt
 
 
 
-## Nanopore
+## Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
 
 #### 1. Quality check
 
