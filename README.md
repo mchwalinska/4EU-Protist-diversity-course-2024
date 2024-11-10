@@ -6,21 +6,26 @@ This is a step-by-step instruction for the bioinformatic part of the course.
 <!--- TOC START -->
 Table of Contents
 -----------------
-- [Introduction](#Introduction)
-- [Illumina](#Illumina)
-- [Nanopore](#Nanopore)
+- [Day-1-From-Reads-to-Taxa](#Day-1)
+  - [Introduction](#Introduction)
+  - [Illumina](#Illumina)
+  - [Nanopore](#Nanopore)
+- [Day-2-From-Taxa-to-Diversity](#Day-2)
 <!--- TOC END -->
 
 
 
-## Introduction
+
+## DAY 1 - From Reads to Taxa
+
+
+### Introduction
 
 Introduction about conda and qiime.
 
 
 
-
-## Illumina
+### Illumina
 
 
 #### 1. Activating QIIME2 environment
@@ -69,7 +74,7 @@ qiime feature-table tabulate-seqs --i-data representative_sequences.qza --o-visu
 
 #### 8. Exporting files
 
-Our representative sequences download from representative_sequences.qzv
+Our representative sequences download from **representative_sequences.qzv**
 
 OTU table needs to exported using qiime
 ```
@@ -91,8 +96,7 @@ python3 ../formate_vsearch_output.py -i taxonomy.txt
 
 
 
-
-## Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
+### Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
 
 #### 1. Quality check
 
@@ -172,4 +176,9 @@ python3 abundance.py -otu 99_centroidy_80 -bclu ../0.975_18S_barrnap_filtlong_KR
 ```
 vsearch --usearch_global 99_centroidy_80 --db /home/users/mchwalinska/nano/pr2_database-5.0.0.fasta --id 0.7 --blast6out tax_99_centroidy_80  --query_cov 0.9
 ```
+
+
+## DAY 2 - From Taxa to Diversity
+
+
 
