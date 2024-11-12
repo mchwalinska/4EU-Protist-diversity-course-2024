@@ -34,6 +34,16 @@ Introduction about conda and qiime.
 conda activate qiime2
 ```
 
+<details>
+  <summary>Click to see the answer</summary>
+
+  Your answer goes here. You can write multiple lines of text, add code snippets, lists, images, and more.
+
+  ```python
+  # Example code block
+  print("Hello, world!")
+
+
 #### 2. Raw reads quality check
 
 ```
