@@ -36,7 +36,7 @@ First download repository to your computer, unzip and then upload folder `script
 scp -r scripts student14@anthriscus:~
 ``` 
 
-In the next step create two folders and enter the folder illumina for the first part of the analysis:
+In the next step create two folders and enter the folder `illumina` for the first part of the analysis:
 
 ```
 mkdir illumina
@@ -147,15 +147,13 @@ biom convert --to-tsv -i exported/feature-table.biom -o exported/feature-table.t
 
 Download `feature-table.tsv` to your computer.
 
-Download sequences from `representative_sequences.qzv` file.
+Download sequences from `representative_sequences.qzv` file and upload them to your working directory on the server (folder `illumina`).
 
 <details>
   <summary>Help here</summary>
 
   ![Description of the image](imgs/rep_seq.png)
 </details>
-
-And upload them to your working directory on the server (folder illumina).
 
 
 #### 10. Taxonomic annotation
@@ -192,6 +190,12 @@ Download taxonomy_table.tsv to your computer and open in Excel.
 ***Which taxa are most abundant in your samples?***
 
 
+#### !!! <ins>FINAL OUTCOMES</ins> !!!
+
+Congratulations! You've just finished the first part of today's data analysis!
+As a final outputs you obtained:
+* `feature-table.tsv` - table of ASVs abundances
+* `taxonomy_table.tsv` - table of taxonomy for each ASV
 
 
 
