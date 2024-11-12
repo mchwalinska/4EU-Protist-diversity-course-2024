@@ -42,6 +42,8 @@ conda activate qiime2
   ```python
   # Example code block
   print("Hello, world!")
+  ```
+</details> 
 
 
 #### 2. Raw reads quality check
