@@ -149,7 +149,11 @@ Download `feature-table.tsv` to your computer.
 
 Download sequences from `representative_sequences.qzv` file.
 
-![Description of the image](imgs/rep_seq.png)
+<details>
+  <summary>Help here</summary>
+
+  ![Description of the image](imgs/rep_seq.png)
+</details>
 
 And upload them to your working directory on the server (folder illumina).
 
@@ -169,7 +173,11 @@ vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database
 
 Open downloaded `feature-table.tsv` in Excel, remove first raw and save changes.
 
-![Description of the image](imgs/table.png)
+<details>
+  <summary>Help here</summary>
+
+  ![Description of the image](imgs/table.png)
+</details>
 
 ***What this file shows us?***
 
