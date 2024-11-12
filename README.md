@@ -30,7 +30,7 @@ Introduction about conda and qiime.
 
 #### 1. Downloading scripts and preparing working environment
 
-First download repository to your computer, unzip and then upload folder **scripts** to your home folder on the server using the command below.
+First download repository to your computer, unzip and then upload folder `scripts` to your home folder on the server using the command below.
 
 ```
 scp -r scripts student14@anthriscus:~
@@ -47,95 +47,155 @@ cd illumina
 <details>
   <summary>Your home folder should look like this </summary>
 
-  Your answer goes here. You can write multiple lines of text, add code snippets, lists, images, and more.
-
-  ```python
-  # Example code block
-  print("Hello, world!")
-  ```
-</details> 
-
-#### 2. Activating QIIME2 environment
-
-```
-conda activate qiime2
-```
-
-<details>
-  <summary>Click to see the answer</summary>
-
-  Your answer goes here. You can write multiple lines of text, add code snippets, lists, images, and more.
-
-  ```python
-  # Example code block
-  print("Hello, world!")
-  ```
+  ![Description of the image](imgs/folders.png)
 </details> 
 
 
 #### 2. Raw reads quality check
 
+First check reads quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+
 ```
-fastqc *.fastq
+for folder in *; do fastqc "$folder"/*.fastq; done
 ```
-  
-#### 3. Importing data $${\color{red} zależy \space od \space formatu \space danych }$$
+
+Download `.html` file on your computer and open it in browser.
+***Is the quality good or bad? What else did you notice?***
+
+
+#### 3. Activating QIIME 2 environment
+
+Now you will start working in QIIME 2 environment.
+
 ```
-qiime tools import --type MultiplexedPairedEndBarcodeInSequence --input-path ./raw/ --output-path multiplexed-seqs.qza
+conda activate qiime2
+```
+
+
+#### 4. Importing data $${\color{red} zależy \space od \space formatu \space danych }$$
+
+First step is to import your `.fastq` files to special `.qza` artefact file.
+
+```
+qiime tools import --type MultiplexedPairedEndBarcodeInSequence --input-path ../../4UProtistDiversity/raw_illumina/ --output-path multiplexed-seqs.qza
 qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
 ```
 
-#### 4. Primer trimming $${\color{red} czy \space osobno \space usuwać \space adaptery? }$$
+#### 5. Primer trimming $${\color{red} czy \space osobno \space usuwać \space adaptery? }$$
+
+To cut primers you will use [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
 
 ```
-qiime cutadapt trim-paired --i-demultiplexed-sequences ./demultiplexed-seqs.qza --p-cores 8 --p-front-f CCAGCASCYGCGGTAATTCC --p-front-r ACTTTCGTTCTTGATYRA --o-trimmed-sequences trimmed_demux.qza
+qiime cutadapt trim-paired --i-demultiplexed-sequences ./demultiplexed-seqs.qza --p-cores 4 --p-front-f CCAGCASCYGCGGTAATTCC --p-front-r ACTTTCGTTCTTGATYRA --o-trimmed-sequences trimmed_demux.qza
 ```
 
-#### 5. Visualisation of trimming data quality
+#### 6. Visualisation of trimming data quality
+
+In this step you will create QIIME 2 artifact `.qzv` which allows data visualisation. 
 
 ```
 qiime demux summarize --i-data trimmed_demux.qza --o-visualization trimmed_demux.qzv
 ```
 
-#### 6. DADA2 $${\color{red} cay \space dawać \space im \space progi \space cięcia \space od \space razu? }$$
+Download `trimmed_demux.qzv` on you computer and upload the file on the [QIIME2View](https://view.qiime2.org) website.
+***Investigate both tabs***.
+
+
+#### 7. Quality filtering, denoising, merging and chimera removal $${\color{red} cay \space dawać \space im \space progi \space cięcia \space od \space razu? }$$
+
+You will use [DADA2](https://benjjneb.github.io/dada2/) software to create Amplicon Sequence Variants (ASVs).
+
+This step inculdes lenght trimming. ***How much would you trim forward and reverse reads, to find balance between quality and merging?*** Use `trimmed_demux.qzv` quality plots as a clue.
 
 ```
-qiime dada2 denoise-paired --p-n-threads 8 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f 205 --p-trunc-len-r 200  --output-dir dada2
+qiime dada2 denoise-paired --p-n-threads 8 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f ? --p-trunc-len-r ?  --output-dir dada2
 ```
 
-#### 7. Visualisation of DADA2 outputs
+<details>
+  <summary>Suggested command</summary>
+  
+  ```
+  qiime dada2 denoise-paired --p-n-threads 8 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f 205 --p-trunc-len-r 200  --output-dir dada2
+  ```
+</details> 
+
+
+#### 8. Visualisation of DADA2 outputs
+
+Create `.qzv` for all the outputs.
 
 ```
-qiime metadata tabulate --m-input-file denoising_stats.qza --o-visualization denoising_stats.qzv
-qiime feature-table summarize --i-table table.qza --o-visualization table.qzv
-qiime feature-table tabulate-seqs --i-data representative_sequences.qza --o-visualization representative_sequences.qzv
+qiime metadata tabulate --m-input-file dada2/denoising_stats.qza --o-visualization denoising_stats.qzv
+qiime feature-table summarize --i-table dada2/table.qza --o-visualization table.qzv
+qiime feature-table tabulate-seqs --i-data dada2/representative_sequences.qza --o-visualization representative_sequences.qzv
 ```
 
-#### 8. Exporting files
+Again upload files on [QIIME2View](https://view.qiime2.org) website and ivestigate them.
+***What % of your reads merged successfully?***
 
-Our representative sequences download from **representative_sequences.qzv**
 
-OTU table needs to exported using qiime
-```
-qiime tools export --input-path table.qza --output-path exported
-biom convert --to-tsv -i feature-table.biom -o feature-table.tsv
-```
+#### 9. Exporting files
 
-#### 9. Taxonomic annotation
+To assign taxonomy and for futher diversity analysis you need to download two files: `ASV table` and `representative sequences` (your ASVs).
+
+OTU table needs to exported using QIIME2:
 
 ```
-vsearch --usearch_global dada2/rep_seqs.fasta --db ../../pr2_database-5.0.0.fasta --blast6out taxonomy.txt --id 0.70
+qiime tools export --input-path dada2/table.qza --output-path exported
+biom convert --to-tsv -i exported/feature-table.biom -o exported/feature-table.tsv
 ```
 
-#### 10. Formating output
+Download `feature-table.tsv` to your computer.
+
+Download sequences from `representative_sequences.qzv` file.
+
+![Description of the image](imgs/rep_seq.png)
+
+And upload them to your working directory on the server (folder illumina).
+
+
+#### 10. Taxonomic annotation
+
+You will assign taxonomy using [VSEARCH](https://github.com/torognes/vsearch) software, which uses global alignment method. For reference you will use [PR2](https://pr2-database.org) database.
 
 ```
-python3 ../formate_vsearch_output.py -i taxonomy.txt
+vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
 ```
+
+***Which other databases and methods of assigning taxonomy do you know?***
+
+
+#### 11. Modifying outputs
+
+Open downloaded `feature-table.tsv` in Excel, remove first raw and save changes.
+
+![Description of the image](imgs/table.png)
+
+***What this file shows us?***
+
+
+Using Python script you will modify `taxonomy.tsv`
+
+```
+../scripts/modify_taxonomy_illumina.py -i taxonomy.tsv -o taxonomy_table.tsv
+```
+
+Download taxonomy_table.tsv to your computer and open in Excel.
+***Which taxa are most abundant in your samples?***
+
+
+
+
 
 
 
 ### Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
+
+Copy raw data to your current location (folder illumina):
+
+```
+cp ../../4UProtistDiversity/raw_illumina/* .
+```
 
 #### 1. Quality check
 
