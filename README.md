@@ -28,7 +28,34 @@ Introduction about conda and qiime.
 ### Illumina
 
 
-#### 1. Activating QIIME2 environment
+#### 1. Downloading scripts and preparing working environment
+
+First download repository to your computer, unzip and then upload folder **scripts** to your home folder on the server using the command below.
+
+```
+scp -r scripts student14@anthriscus:~
+``` 
+
+In the next step create two folders and enter the folder illumina for the first part of the analysis:
+
+```
+mkdir illumina
+mkdir nanopore
+cd illumina
+```
+
+<details>
+  <summary>Your home folder should look like this </summary>
+
+  Your answer goes here. You can write multiple lines of text, add code snippets, lists, images, and more.
+
+  ```python
+  # Example code block
+  print("Hello, world!")
+  ```
+</details> 
+
+#### 2. Activating QIIME2 environment
 
 ```
 conda activate qiime2
