@@ -203,42 +203,82 @@ As a final outputs you obtained:
 
 ### Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
 
-Copy raw data to your current location (folder illumina):
+#### 1. Copying data $${\color{red} podział \space na \space próbki}$$
+
+For the second part of the day folder `nanopore` will become your working directory.
+
+At first copy your two samples to your working directory.
 
 ```
-cp ../../4UProtistDiversity/raw_illumina/* .
+cp ../../4UProtistDiversity/raw_nanopore/studentX/* .
 ```
 
-#### 1. Quality check
+
+#### 2. Quality check
+
+For nanopore data we will use two softwares to check the quality. Already known FastQC and [NanoPlot](https://github.com/wdecoster/NanoPlot). The first line splits your samples to separate folders. For Nanoplot you need to activate conda environment.
 
 ```
-fastqc *.fastq
-for file in  *.fastq ; do NanoPlot --fastq $file --tsv_stats --info_in_report -o "np_${file%.*}" ; done
+for file in *.fastq; do folder_name="${file%.fastq}"; mkdir -p "$folder_name"; mv "$file" "$folder_name"; done
+for folder in *; do fastqc "$folder"/*.fastq; done
+conda activate nanoplot
+for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_raw ; done
+conda deactivate
 ```
+Download $${\color{red} tutaj \space output}$$
+
 
 #### 2. Length and quality filtering
 
+Using [Filtlong](https://github.com/rrwick/Filtlong) filter reads by length and quality.
+
 ```
-filtlong --min_length 2000 --max_length 6000  --min_mean_q 90 $file > "filtlong_${file%.*}.fastq"
+conda activate filtlong
+for folder in *; do filtlong --min_length 2000 --max_length 6000  --min_mean_q 90  "$folder"/*.fastq > "$folder"/filtlong.fastq; done
+conda deactivate
 ```
 
 #### 3. Comparing quality after filtering
 
+Again perform quality check.
+
 ```
-fastqc *.fastq
-for file in  filtlong_*.fastq ; do NanoPlot --fastq $file --tsv_stats --info_in_report -o "np_${file%.*}" ; done
+for folder in *; do fastqc "$folder"/filtlong.fastq; done
+conda activate nanoplot
+for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_filtered ; done
+conda deactivate
 ```
+***Compare the results to non-filtered reads. What differences do you see?***
+
 
 #### 4. Extracting 18S
 
-```
-barrnap --kingdom euk --reject 0.1 --outseq "barrnap_${file%.*}.fasta" $file --threads 8
-```
-
-#### 5. Getting quality from nanoplot
+Using [Barrnap](https://github.com/tseemann/barrnap) extract rDNA fragments from your reads. But first change `filtlong.fastq` to `filtlong.fasta` using `sed` command.
 
 ```
-for file in  np_filtlong_* ; do python3 clustering_treshold_calculations.py -s "${file%.*}/NanoStats.txt" -e P_error_table.tsv ; done
+for folder in *; do sed -n '1~4s/^@/>/p;2~4p' "$folder"/filtlong.fastq > "$folder"/filtlong.fasta; done
+conda activate barrnap
+for folder in *; do barrnap --kingdom euk --reject 0.1 --outseq "$folder"/barrnap.fasta "$folder"/filtlong.fasta --threads 4; done
+conda deactivate
+```
+
+***How many different rDNA fragments did you obtain?***
+
+Using Python script you will keep only fragmenst of 18S rDNA for futher analysis.
+
+```
+for folder in *; do cp ../scripts/extracting_18S.py "$folder";  "$folder"/extracting_18S.py -i "$folder"/barrnap.fasta -o "$folder"/18S_extracted.fasta; done
+```
+
+***Do you know why we choose to focus only on 18S rDNA?***
+
+
+#### 5. Getting average reads quality
+
+For the next step you need to calculate average read quality for each sample. Python script reclaculates Phred scale quality provided by NanoPlot to quality in hundredth values.
+
+```
+for folder in *; do cp ../scripts/clustering_treshold_calculations.py ../scripts/P_error_table.tsv "$folder"; echo "$folder"; "$folder"/clustering_treshold_calculations.py -s "$folder"/nanoplot_filtered/NanoStats.txt -e "$folder"/P_error_table.tsv; done
 ```
 
 #### 6. Clustering
