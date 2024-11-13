@@ -33,7 +33,7 @@ Introduction about conda and qiime.
 First download repository to your computer, unzip and then upload folder `scripts` to your home folder on the server using the command below.
 
 ```
-scp -r scripts student14@anthriscus:~
+scp -r scripts studentX@anthriscus:~
 ``` 
 
 In the next step create two folders and enter the folder `illumina` for the first part of the analysis:
@@ -228,7 +228,7 @@ conda deactivate
 Download $${\color{red} tutaj \space output}$$
 
 
-#### 2. Length and quality filtering
+#### 3. Length and quality filtering
 
 Using [Filtlong](https://github.com/rrwick/Filtlong) filter reads by length and quality.
 
@@ -238,7 +238,7 @@ for folder in *; do filtlong --min_length 2000 --max_length 6000  --min_mean_q 9
 conda deactivate
 ```
 
-#### 3. Comparing quality after filtering
+#### 4. Comparing quality after filtering
 
 Again perform quality check.
 
@@ -251,7 +251,7 @@ conda deactivate
 ***Compare the results to non-filtered reads. What differences do you see?***
 
 
-#### 4. Extracting 18S
+#### 5. Extracting 18S rDNA sequences
 
 Using [Barrnap](https://github.com/tseemann/barrnap) extract rDNA fragments from your reads. But first change `filtlong.fastq` to `filtlong.fasta` using `sed` command.
 
@@ -267,66 +267,116 @@ conda deactivate
 Using Python script you will keep only fragmenst of 18S rDNA for futher analysis.
 
 ```
-for folder in *; do cp ../scripts/extracting_18S.py "$folder";  "$folder"/extracting_18S.py -i "$folder"/barrnap.fasta -o "$folder"/18S_extracted.fasta; done
+for folder in *; do ../scripts/extracting_18S.py -i "$folder"/barrnap.fasta -o "$folder"/18S_extracted.fasta; done
 ```
 
 ***Do you know why we choose to focus only on 18S rDNA?***
 
 
-#### 5. Getting average reads quality
+#### 6. Getting average reads quality
 
 For the next step you need to calculate average read quality for each sample. Python script reclaculates Phred scale quality provided by NanoPlot to quality in hundredth values.
 
 ```
-for folder in *; do cp ../scripts/clustering_treshold_calculations.py ../scripts/P_error_table.tsv "$folder"; echo "$folder"; "$folder"/clustering_treshold_calculations.py -s "$folder"/nanoplot_filtered/NanoStats.txt -e "$folder"/P_error_table.tsv; done
+for folder in *; do echo "$folder"; ../scripts/clustering_treshold_calculations.py -s "$folder"/nanoplot_filtered/NanoStats.txt -e ../scripts/P_error_table.tsv; done
 ```
 
-#### 6. Clustering
+
+#### 7. Clustering
+
+Previously you used VSEARCH to assign taxonomy. However this software has many more functions and clustering is one of them.
 
 ```
-mkdir "0.${id%.*}_${file%.*}_clusters"
-vsearch --cluster_fast $file -id "0.${id%.*}" --clusters "0.${id%.*}_${file%.*}_clusters"/"0.${id%.*}_clust" &>> "out.${file%.*}_0.${id%.*}_clust"
-vsearch --cluster_fast nonchim_b_racon_0.8.fasta  -id 0.99 --clusters 99_clusters_80/clust --centroids 99_centroidy_80
+for folder in *; do mkdir "$folder"/clusters_error; done
+
+# Run the command below separately for your two samples. Remember to setup you folder name and id (eg. -id 0.975)
+vsearch --cluster_fast <folder>/18S_extracted.fasta -id <your error> --clusters <folder>/clusters_error/cluster_ --centroids <folder>/centroids_error.fasta 
 ```
 
-#### 7. Polishing
+
+#### 8. Polishing
+
+Polishing is an important step of working with nanopore data, as it's improving reads quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs sequence correction.
 
 ```
-python3 minimap.py -c consen_0.975_18S_barrnap_filtlong_BAB10_clusters.fasta -cf 0.975_18S_barrnap_filtlong_BAB10_clusters -of minimap_out_BAB10
-for folder in minimap_out* ; do cat $folder/* > "${folder%.*}.paf" ; done
-racon BAB10_clusters.fasta  -q 20 -w 500  minimap_out_BAB10.paf consen_0.975_18S_barrnap_filtlong_BAB10_clusters.fasta > racon_0.8_BAB10.fasta
+for folder in *; do minimap2 "$folder"/centroids_error.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
+conda activate racon
+for folder in *; do racon "$folder"/18S_extracted.fasta -q 20 -w 500 "$folder"/minimap2.paf "$folder"/centroids_error.fasta > "$folder"/racon.fasta; done
+conda deactivate
 ```
 
-#### 8. Add bar
+
+#### 9. Merging samples
+
+For next step you will need to work on all the samples.
+First using Python script add sample names to the headers of your polished sequences.
 
 ```
-python3 add_bar_to_id.py -i ../racon_0.8_KRA3.fasta -b KRA3 -o b_racon_0.8_KRA3.fasta
-cat b_racon_0.8_* > b_racon_0.8.fasta
+for folder in *; do ../scripts/add_names.py -i "$folder"/racon.fasta -b "$folder" -o "racon_${folder%.*}.fasta"; done
 ```
 
-#### 9. Chimeras removal
+Next copy your whole sample folder to the folder `../4UProtistDiversity/merging_nanopore`.
+Finally merge polshed and renamed sequences together.
 
 ```
-vsearch --uchime_ref b_racon_0.8.fasta --db /home/users/mchwalinska/nano/pr2_database-5.0.0.fasta --nonchimeras nonchim_b_racon_0.8.fasta --chimeras chim_b_racon_0.8.fasta
+cat ../4UProtistDiversity/merging_nanopore/*/racon_* > merged_seqs.fasta
 ```
 
-#### 10. Final clustering
+
+#### 10. Chimeras removal
+
+Here you will again use VSEARCH, but this time to remove chimeric sequences.
 
 ```
-vsearch --cluster_fast nonchim_b_racon_0.8.fasta  -id 0.99 --clusters 99_clusters_80/clust --centroids 99_centroidy_80
+vsearch --uchime_ref merged_seqs.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --nonchimeras merged_nonchim_seqs.fasta
 ```
 
-#### 11. Abundance calculations
+***What % of sequences turned out to be chimeric? Is it more or less than in case of illumina?***
+
+
+#### 11. Final clustering
+
+To obtain your final Operational Taxonomic Units (OTUs) you need to cluster together identital sequences from all the samples.
 
 ```
-python3 abundance.py -otu 99_centroidy_80 -bclu ../0.975_18S_barrnap_filtlong_KRA3_clusters -fclu 99_clusters_80 -b KRA3 -o 99_centroidy_80_KRA3
+mkdir clusters_final
+vsearch --cluster_fast merged_nonchim_seqs.fasta  -id 0.99 --clusters clusters_final/cluster_ --centroids otus.fasta
 ```
+
 
 #### 12. Taxonomic annotation
 
+You will assign taxonomy and modify the output in the same way you did for illumina. 
+
 ```
-vsearch --usearch_global 99_centroidy_80 --db /home/users/mchwalinska/nano/pr2_database-5.0.0.fasta --id 0.7 --blast6out tax_99_centroidy_80  --query_cov 0.9
+vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
+../scripts/modify_taxonomy_nanopore.py -i taxonomy.tsv -o taxonomy_table.tsv
 ```
+Download `taxonomy_table.tsv` to your computer.
+
+
+#### 13. Abundance calculations
+
+In this step you will use Python scripts to calculate OTUs abundance (based on abundance in clusters) and create final OTU table.
+
+```
+for folder in ../4UProtistDiversity/merging_nanopore/*; do ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "otu_${folder%.*}"; done
+../script/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
+```
+
+Download `otu_table.tsv` to your computer.
+
+
+#### !!! <ins>FINAL OUTCOMES</ins> !!!
+
+Congratulations! You've just finished the first day of data analysis!
+As a final outputs you obtained:
+* `otu_table.tsv` - table of OTUs abundances
+* `taxonomy_table.tsv` - table of taxonomy for each OTU
+
+
+
+
 
 
 ## DAY 2 - From Taxa to Diversity
