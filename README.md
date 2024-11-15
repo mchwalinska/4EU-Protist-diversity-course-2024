@@ -21,7 +21,7 @@ Table of Contents
 
 ### Introduction
 
-During the first day of data analysis, you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require you to activate conda environment with the command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
+During the first day of the data analysis part of the 4EU-Protist-diversity course, you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require you to activate conda environment with the command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
 
 To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform with special plugins.
 
@@ -32,10 +32,10 @@ To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform
 
 #### 1. Downloading scripts and preparing working environment
 
-First, download the repository to your computer, unzip and then upload folder scripts to your home folder on the server using the command below.
+First, download the repository to your computer, unzip and then navigate to unzipped directory. Next upload the folder 'scripts' to your home folder on the server using the command below (or other solution that works on your system)
 
 ```
-scp -r scripts studentX@anthriscus:~
+scp -r scripts studentX@212.87.6.113:~
 ``` 
 
 In the next step create two folders and enter the folder illumina for the first part of the analysis:
@@ -61,7 +61,14 @@ First, check read quality using [FastQC](https://www.bioinformatics.babraham.ac.
 for file in ../../4UProtistDiversity/raw_illumina/*; do fastqc "$file" -o ./; done
 ```
 
-Download `.html` file on your computer and open it in browser.
+Download `.html` files on your computer and open it in browser.
+
+Plase take look at command below that you will run using a terminal window at your local machine)
+
+```
+scp studentX@212.87.6.113:~/illumina/*.html localdirectory
+``` 
+
 ***Is the quality good or bad? What else did you notice?***
 
 
