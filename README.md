@@ -21,7 +21,9 @@ Table of Contents
 
 ### Introduction
 
-Introduction about conda and qiime.
+During the first day of data analysis you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require from you to activate conda environment with command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
+
+To analsyse illumina data you will use [QIIME2](https://qiime2.org) platform with special plugins.
 
 
 
@@ -81,7 +83,7 @@ qiime tools import --type MultiplexedPairedEndBarcodeInSequence --input-path ../
 qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
 ```
 
-#### 5. Primer trimming $${\color{red} czy \space osobno \space usuwać \space adaptery? }$$
+#### 5. Primer trimming
 
 To cut primers you will use [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
 
@@ -101,7 +103,7 @@ Download `trimmed_demux.qzv` on you computer and upload the file on the [QIIME2V
 ***Investigate both tabs***.
 
 
-#### 7. Quality filtering, denoising, merging and chimera removal $${\color{red} cay \space dawać \space im \space progi \space cięcia \space od \space razu? }$$
+#### 7. Quality filtering, denoising, merging and chimera removal
 
 You will use [DADA2](https://benjjneb.github.io/dada2/) software to create Amplicon Sequence Variants (ASVs).
 
@@ -216,7 +218,8 @@ cp ../../4UProtistDiversity/raw_nanopore/studentX/* .
 
 #### 2. Quality check
 
-For nanopore data we will use two softwares to check the quality. Already known FastQC and [NanoPlot](https://github.com/wdecoster/NanoPlot). The first line splits your samples to separate folders. For Nanoplot you need to activate conda environment.
+For nanopore data we will use two softwares to check the quality, already known FastQC and [NanoPlot](https://github.com/wdecoster/NanoPlot). 
+The first command puts your samples to separate folders.
 
 ```
 for file in *.fastq; do folder_name="${file%.fastq}"; mkdir -p "$folder_name"; mv "$file" "$folder_name"; done
@@ -225,7 +228,10 @@ conda activate nanoplot
 for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_raw ; done
 conda deactivate
 ```
-Download $${\color{red} tutaj \space output}$$
+
+Again download `.html` file to your computer and open it in browser. ***Do you see difference with illumina dada?***
+NanoPlot produces a lot of outputs. One of them are genereal statistics `NanoStats.txt`. The other one are plots.
+Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect. ***Which of those two softwares is better for nanopore data and why?*** 
 
 
 #### 3. Length and quality filtering
@@ -248,7 +254,7 @@ conda activate nanoplot
 for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_filtered ; done
 conda deactivate
 ```
-***Compare the results to non-filtered reads. What differences do you see?***
+***Compare the results to non-filtered reads (step 2). What differences do you see?***
 
 
 #### 5. Extracting 18S rDNA sequences
@@ -360,7 +366,7 @@ Download `taxonomy_table.tsv` to your computer.
 In this step you will use Python scripts to calculate OTUs abundance (based on abundance in clusters) and create final OTU table.
 
 ```
-for folder in ../4UProtistDiversity/merging_nanopore/*; do ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "otu_${folder%.*}"; done
+for folder in ../4UProtistDiversity/merging_nanopore/*; do ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "abundance_${folder%.*}"; done
 ../script/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
 ```
 
