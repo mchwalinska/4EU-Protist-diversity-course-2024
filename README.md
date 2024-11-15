@@ -236,7 +236,7 @@ For the second part of the day folder `nanopore` will become your working direct
 First, copy your two samples to your working directory.
 
 ```
-cp ../../4UProtistDiversity/raw_nanopore/studentX/* .
+cp ../../4UProtistDiversity/raw_nanopore/sample_name .
 ```
 
 
@@ -248,9 +248,8 @@ The first command puts your samples to separate folders.
 ```
 for file in *.fastq; do folder_name="${file%.fastq}"; mkdir -p "$folder_name"; mv "$file" "$folder_name"; done
 for folder in *; do fastqc "$folder"/*.fastq; done
-conda activate nanoplot
+conda activate nanopore
 for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_raw ; done
-conda deactivate
 ```
 
 Again download the `.html` file to your computer and open it in the browser. ***Do you see the difference with illumina dada?***
@@ -263,9 +262,7 @@ NanoPlot produces a lot of outputs. One of them is general statistics `NanoStat
 Using [Filtlong](https://github.com/rrwick/Filtlong) to filter reads by length and quality.
 
 ```
-conda activate filtlong
 for folder in *; do filtlong --min_length 2000 --max_length 6000  --min_mean_q 90  "$folder"/*.fastq > "$folder"/filtlong.fastq; done
-conda deactivate
 ```
 
 #### 4. Comparing quality after filtering
@@ -274,9 +271,7 @@ Again perform quality check.
 
 ```
 for folder in *; do fastqc "$folder"/filtlong.fastq; done
-conda activate nanoplot
 for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_filtered ; done
-conda deactivate
 ```
 ***Compare the results to non-filtered reads (step 2). What differences do you see?***
 
@@ -287,9 +282,7 @@ Using [Barrnap](https://github.com/tseemann/barrnap) extract rDNA fragments from
 
 ```
 for folder in *; do sed -n '1~4s/^@/>/p;2~4p' "$folder"/filtlong.fastq > "$folder"/filtlong.fasta; done
-conda activate barrnap
 for folder in *; do barrnap --kingdom euk --reject 0.1 --outseq "$folder"/barrnap.fasta "$folder"/filtlong.fasta --threads 4; done
-conda deactivate
 ```
 
 ***How many different rDNA fragments did you obtain?***
@@ -330,9 +323,7 @@ Polishing is an important step of working with nanopore data, as it's improving 
 
 ```
 for folder in *; do minimap2 "$folder"/centroids_error.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
-conda activate racon
 for folder in *; do racon "$folder"/18S_extracted.fasta -q 20 -w 500 "$folder"/minimap2.paf "$folder"/centroids_error.fasta > "$folder"/racon.fasta; done
-conda deactivate
 ```
 
 
@@ -342,14 +333,14 @@ For next step you will need to work on all the samples.
 First using Python script add sample names to the headers of your polished sequences.
 
 ```
-for folder in *; do ../scripts/add_names.py -i "$folder"/racon.fasta -b "$folder" -o "racon_${folder%.*}.fasta"; done
+for folder in *; do ../scripts/add_names.py -i "$folder"/racon.fasta -b "$folder" -o "$folder"/"racon_${folder%.*}.fasta"; done
 ```
 
-Next copy your whole sample folder to the folder `../4UProtistDiversity/merging_nanopore`.
+Next copy your whole sample folder to the folder `../../4UProtistDiversity/merging_nanopore`.
 Finally merge polshed and renamed sequences together.
 
 ```
-cat ../4UProtistDiversity/merging_nanopore/*/racon_* > merged_seqs.fasta
+cat ../../4UProtistDiversity/merging_nanopore/*/racon_* > merged_seqs.fasta
 ```
 
 
@@ -379,7 +370,7 @@ vsearch --cluster_fast merged_nonchim_seqs.fasta  -id 0.99 --clusters clusters_f
 You will assign taxonomy and modify the output in the same way you did for illumina. 
 
 ```
-vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
+vsearch --usearch_global otus.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
 ../scripts/modify_taxonomy_nanopore.py -i taxonomy.tsv -o taxonomy_table.tsv
 ```
 Download `taxonomy_table.tsv` to your computer.
@@ -390,7 +381,7 @@ Download `taxonomy_table.tsv` to your computer.
 In this step you will use Python scripts to calculate OTUs abundance (based on abundance in clusters) and create final OTU table.
 
 ```
-for folder in ../4UProtistDiversity/merging_nanopore/*; do ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "abundance_${folder%.*}"; done
+for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(basename "$folder"); ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "abundance_${folder_name}.tsv"; done
 ../script/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
 ```
 
