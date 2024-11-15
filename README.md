@@ -165,6 +165,8 @@ qiime tools export --input-path dada2/table.qza --output-path exported
 biom convert --to-tsv -i exported/feature-table.biom -o exported/feature-table.tsv
 ```
 
+Created files you will find in the folder 'exported'
+
 Download `feature-table.tsv` to your computer.
 
 
@@ -199,8 +201,7 @@ Using Python script you will modify `taxonomy.tsv`
 ```
 
 Download taxonomy_table.tsv to your computer and open in Excel.
-***Which taxa are most abundant in your samples?***
-
+***Which taxa are the most present in your samples?***
 
 #### !!! <ins>FINAL OUTCOMES</ins> !!!
 
