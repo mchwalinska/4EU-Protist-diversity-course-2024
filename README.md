@@ -74,12 +74,11 @@ conda activate qiime2
 ```
 
 
-#### 4. Importing data $${\color{red} zależy \space od \space formatu \space danych }$$
+#### 4. Importing data
 
 First step is to import your `.fastq` files to a special `.qza` artefact file.
 
 ```
-qiime tools import --type MultiplexedPairedEndBarcodeInSequence --input-path ../../4UProtistDiversity/raw_illumina/ --output-path multiplexed-seqs.qza
 qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
 ```
 
