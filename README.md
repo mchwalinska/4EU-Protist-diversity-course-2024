@@ -200,6 +200,19 @@ Using Python script you will modify `taxonomy.tsv`
 ../scripts/modify_taxonomy_illumina.py -i taxonomy.tsv -o taxonomy_table.tsv
 ```
 
+<details>
+  <summary>In the case of permission denided error</summary>
+
+  In some cases scripts will run, only after changing their permission rules.
+
+  You can easliy fix it by navigating to the 'scripts' folder and set new permissions.
+
+  ```
+chmod 777 *
+```
+</details>
+
+
 Download taxonomy_table.tsv to your computer and open in Excel.
 ***Which taxa are the most present in your samples?***
 
