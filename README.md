@@ -83,7 +83,7 @@ conda activate qiime2
 
 #### 4. Importing data
 
-First step is to import your `.fastq` files to a special `.qza` artefact file.
+First step is to import your `.fastq` files to a special `.qza` artifacts file.
 
 ```
 qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
@@ -91,7 +91,7 @@ qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-fo
 
 #### 5. Primer trimming
 
-To cut primers you will use the [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
+To cut amplification primers you will use the [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
 
 ```
 qiime cutadapt trim-paired --i-demultiplexed-sequences ./demultiplexed-seqs.qza --p-cores 4 --p-front-f CCAGCASCYGCGGTAATTCC --p-front-r ACTTTCGTTCTTGATYRA --o-trimmed-sequences trimmed_demux.qza
@@ -139,7 +139,19 @@ qiime feature-table tabulate-seqs --i-data dada2/representative_sequences.qza --
 ```
 
 Again upload files on the [QIIME2View](https://view.qiime2.org) website and ivestigate them.
+
 ***What % of your reads merged successfully?***
+
+Additionally, when you will be looking at your obtained representative sequences (representative_sequences.qzv), please download them from the QIIME2View website.
+
+<details>
+  <summary>Help here</summary>
+
+  ![Description of the image](imgs/rep_seq.png)
+</details>
+
+ 
+ And finally upload raw representative sequences (fasta format) to your working directory on the server (folder `illumina`).
 
 
 #### 9. Exporting files
@@ -154,14 +166,6 @@ biom convert --to-tsv -i exported/feature-table.biom -o exported/feature-table.t
 ```
 
 Download `feature-table.tsv` to your computer.
-
-Download sequences from `representative_sequences.qzv` file and upload them to your working directory on the server (folder `illumina`).
-
-<details>
-  <summary>Help here</summary>
-
-  ![Description of the image](imgs/rep_seq.png)
-</details>
 
 
 #### 10. Taxonomic annotation
