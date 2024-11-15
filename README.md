@@ -58,7 +58,7 @@ cd illumina
 First, check read quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 
 ```
-for folder in *; do fastqc "$folder"/*.fastq; done
+for file in ../../4UProtistDiversity/raw_illumina/*; do fastqc "$file" -o ./; done
 ```
 
 Download `.html` file on your computer and open it in browser.
