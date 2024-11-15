@@ -203,9 +203,9 @@ As a final outputs you obtained:
 
 
 
-### Nanopore $${\color{red} cały \space do \space sprawdzenia}$$
+### Nanopore
 
-#### 1. Copying data $${\color{red} podział \space na \space próbki}$$
+#### 1. Copying data
 
 For the second part of the day folder `nanopore` will become your working directory.
 
