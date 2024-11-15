@@ -21,9 +21,9 @@ Table of Contents
 
 ### Introduction
 
-During the first day of data analysis you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require from you to activate conda environment with command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
+During the first day of data analysis, you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require you to activate conda environment with the command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
 
-To analsyse illumina data you will use [QIIME2](https://qiime2.org) platform with special plugins.
+To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform with special plugins.
 
 
 
@@ -32,13 +32,13 @@ To analsyse illumina data you will use [QIIME2](https://qiime2.org) platform wit
 
 #### 1. Downloading scripts and preparing working environment
 
-First download repository to your computer, unzip and then upload folder `scripts` to your home folder on the server using the command below.
+First, download the repository to your computer, unzip and then upload folder scripts to your home folder on the server using the command below.
 
 ```
 scp -r scripts studentX@anthriscus:~
 ``` 
 
-In the next step create two folders and enter the folder `illumina` for the first part of the analysis:
+In the next step create two folders and enter the folder illumina for the first part of the analysis:
 
 ```
 mkdir illumina
@@ -55,7 +55,7 @@ cd illumina
 
 #### 2. Raw reads quality check
 
-First check reads quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+First, check read quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 
 ```
 for folder in *; do fastqc "$folder"/*.fastq; done
@@ -65,7 +65,7 @@ Download `.html` file on your computer and open it in browser.
 ***Is the quality good or bad? What else did you notice?***
 
 
-#### 3. Activating QIIME 2 environment
+#### 3. Activating the QIIME 2 environment
 
 Now you will start working in QIIME 2 environment.
 
@@ -76,7 +76,7 @@ conda activate qiime2
 
 #### 4. Importing data $${\color{red} zależy \space od \space formatu \space danych }$$
 
-First step is to import your `.fastq` files to special `.qza` artefact file.
+First step is to import your `.fastq` files to a special `.qza` artefact file.
 
 ```
 qiime tools import --type MultiplexedPairedEndBarcodeInSequence --input-path ../../4UProtistDiversity/raw_illumina/ --output-path multiplexed-seqs.qza
@@ -85,27 +85,27 @@ qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-fo
 
 #### 5. Primer trimming
 
-To cut primers you will use [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
+To cut primers you will use the [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
 
 ```
 qiime cutadapt trim-paired --i-demultiplexed-sequences ./demultiplexed-seqs.qza --p-cores 4 --p-front-f CCAGCASCYGCGGTAATTCC --p-front-r ACTTTCGTTCTTGATYRA --o-trimmed-sequences trimmed_demux.qza
 ```
 
-#### 6. Visualisation of trimming data quality
+#### 6. Visualisation of trimmed data quality
 
-In this step you will create QIIME 2 artifact `.qzv` which allows data visualisation. 
+In this step, you will create QIIME 2 artifact .qzv which allows data visualisation. 
 
 ```
 qiime demux summarize --i-data trimmed_demux.qza --o-visualization trimmed_demux.qzv
 ```
 
-Download `trimmed_demux.qzv` on you computer and upload the file on the [QIIME2View](https://view.qiime2.org) website.
+Download `trimmed_demux.qzv` on your computer and upload the file on the [QIIME2View](https://view.qiime2.org) website.
 ***Investigate both tabs***.
 
 
 #### 7. Quality filtering, denoising, merging and chimera removal
 
-You will use [DADA2](https://benjjneb.github.io/dada2/) software to create Amplicon Sequence Variants (ASVs).
+You will use the [DADA2](https://benjjneb.github.io/dada2/) software to create Amplicon Sequence Variants (ASVs).
 
 This step inculdes lenght trimming. ***How much would you trim forward and reverse reads, to find balance between quality and merging?*** Use `trimmed_demux.qzv` quality plots as a clue.
 
@@ -132,15 +132,15 @@ qiime feature-table summarize --i-table dada2/table.qza --o-visualization table.
 qiime feature-table tabulate-seqs --i-data dada2/representative_sequences.qza --o-visualization representative_sequences.qzv
 ```
 
-Again upload files on [QIIME2View](https://view.qiime2.org) website and ivestigate them.
+Again upload files on the [QIIME2View](https://view.qiime2.org) website and ivestigate them.
 ***What % of your reads merged successfully?***
 
 
 #### 9. Exporting files
 
-To assign taxonomy and for futher diversity analysis you need to download two files: `ASV table` and `representative sequences` (your ASVs).
+To assign taxonomy for further diversity analysis, you need to download two files: `ASV table` and `representative sequences` (your ASVs).
 
-OTU table needs to exported using QIIME2:
+OTU table needs to be exported using QIIME2:
 
 ```
 qiime tools export --input-path dada2/table.qza --output-path exported
@@ -160,7 +160,7 @@ Download sequences from `representative_sequences.qzv` file and upload them to y
 
 #### 10. Taxonomic annotation
 
-You will assign taxonomy using [VSEARCH](https://github.com/torognes/vsearch) software, which uses global alignment method. For reference you will use [PR2](https://pr2-database.org) database.
+You will assign taxonomy using the [VSEARCH](https://github.com/torognes/vsearch) software, which uses global alignment method. For reference you will use the [PR2](https://pr2-database.org) database.
 
 ```
 vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
@@ -171,7 +171,7 @@ vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database
 
 #### 11. Modifying outputs
 
-Open downloaded `feature-table.tsv` in Excel, remove first raw and save changes.
+Open the downloaded `feature-table.tsv` in Excel, remove the first raw and save changes.
 
 <details>
   <summary>Help here</summary>
@@ -179,7 +179,7 @@ Open downloaded `feature-table.tsv` in Excel, remove first raw and save changes.
   ![Description of the image](imgs/table.png)
 </details>
 
-***What this file shows us?***
+***What is this file showing us?***
 
 
 Using Python script you will modify `taxonomy.tsv`
@@ -209,7 +209,7 @@ As a final outputs you obtained:
 
 For the second part of the day folder `nanopore` will become your working directory.
 
-At first copy your two samples to your working directory.
+First, copy your two samples to your working directory.
 
 ```
 cp ../../4UProtistDiversity/raw_nanopore/studentX/* .
@@ -229,14 +229,14 @@ for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_rep
 conda deactivate
 ```
 
-Again download `.html` file to your computer and open it in browser. ***Do you see difference with illumina dada?***
-NanoPlot produces a lot of outputs. One of them are genereal statistics `NanoStats.txt`. The other one are plots.
-Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect. ***Which of those two softwares is better for nanopore data and why?*** 
+Again download the `.html` file to your computer and open it in the browser. ***Do you see the difference with illumina dada?***
+NanoPlot produces a lot of outputs. One of them is general statistics `NanoStats.txt`. The other ones are plots. Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect.
+***Which of those two softwares is better for nanopore data and why?*** 
 
 
 #### 3. Length and quality filtering
 
-Using [Filtlong](https://github.com/rrwick/Filtlong) filter reads by length and quality.
+Using [Filtlong](https://github.com/rrwick/Filtlong) to filter reads by length and quality.
 
 ```
 conda activate filtlong
@@ -270,18 +270,18 @@ conda deactivate
 
 ***How many different rDNA fragments did you obtain?***
 
-Using Python script you will keep only fragmenst of 18S rDNA for futher analysis.
+Using Python script you will keep only fragments of 18S rDNA for further analysis.
 
 ```
 for folder in *; do ../scripts/extracting_18S.py -i "$folder"/barrnap.fasta -o "$folder"/18S_extracted.fasta; done
 ```
 
-***Do you know why we choose to focus only on 18S rDNA?***
+***Do you know why we chose to focus only on 18S rDNA?***
 
 
 #### 6. Getting average reads quality
 
-For the next step you need to calculate average read quality for each sample. Python script reclaculates Phred scale quality provided by NanoPlot to quality in hundredth values.
+For the next step, you need to calculate average read quality for each sample. Python script reclaculates Phred scale quality provided by NanoPlot to quality in percentage values.
 
 ```
 for folder in *; do echo "$folder"; ../scripts/clustering_treshold_calculations.py -s "$folder"/nanoplot_filtered/NanoStats.txt -e ../scripts/P_error_table.tsv; done
