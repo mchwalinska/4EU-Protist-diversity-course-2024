@@ -109,14 +109,14 @@ You will use the [DADA2](https://benjjneb.github.io/dada2/) software to create A
 This step inculdes lenght trimming. ***How much would you trim forward and reverse reads, to find balance between quality and merging?*** Use `trimmed_demux.qzv` quality plots as a clue.
 
 ```
-qiime dada2 denoise-paired --p-n-threads 8 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f ? --p-trunc-len-r ?  --output-dir dada2
+qiime dada2 denoise-paired --p-n-threads 4 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f ? --p-trunc-len-r ?  --output-dir dada2
 ```
 
 <details>
   <summary>Suggested command</summary>
   
   ```
-  qiime dada2 denoise-paired --p-n-threads 8 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f 205 --p-trunc-len-r 200  --output-dir dada2
+  qiime dada2 denoise-paired --p-n-threads 4 --i-demultiplexed-seqs trimmed_demux.qza --p-trunc-len-f 205 --p-trunc-len-r 200  --output-dir dada2
   ```
 </details> 
 
