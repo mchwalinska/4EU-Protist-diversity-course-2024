@@ -89,15 +89,15 @@ conda activate qiime2
 
 #### 4. Importing data
 
-The first step is to import your `.fastq` files to a special `.qza` artifacts file.
+The first step is to import your `.fastq` files to a special `.qza` artifacts file. To do that you will use `manifest.tsv` file, which contains locations of the raw reads.
 
 ```
-qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
+qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ../scripts/manifest.tsv --output-path ./demultiplexed-seqs.qza
 ```
 
 #### 5. Primer trimming
 
-To cut amplification primers you will use the [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin.
+To cut amplification primers you will use the [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) plugin. In this step, you will remove the amplification primers from the file imported in previous step `demultiplexed-seqs.gza`.
 
 ```
 qiime cutadapt trim-paired --i-demultiplexed-sequences ./demultiplexed-seqs.qza --p-cores 4 --p-front-f CCAGCASCYGCGGTAATTCC --p-front-r ACTTTCGTTCTTGATYRA --o-trimmed-sequences trimmed_demux.qza
