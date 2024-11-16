@@ -30,9 +30,9 @@ To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform
 ### Illumina
 
 
-#### 1. Downloading scripts and preparing working environment
+#### 1. Downloading scripts and preparing the working environment
 
-First, download the repository from GitHub to your computer, unzip and then navigate to unzipped directory. Next, upload the folder 'scripts' to your home folder on the server using the command below (or other solution that works on your system)
+First, download the repository from GitHub to your computer, unzip and then navigate to the unzipped directory. Next, upload the folder 'scripts' to your home folder on the server using the command below (or another solution that works on your system)
 
 ```
 scp -r scripts studentX@212.87.6.113:~
@@ -55,15 +55,15 @@ cd illumina
 
 #### 2. Raw reads quality check
 
-First, check read quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+First, check read quality using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/). The Illumina sequencing reads from the experiment are available on the server.
 
 ```
 for file in ../../4UProtistDiversity/raw_illumina/*; do fastqc "$file" -o ./; done
 ```
 
-Download `.html` files on your computer and open it in browser.
+Download `.html` files on your computer and open them in the browser.
 
-Plase take look at command below that you will run using a terminal window at your local machine)
+Please take a look at the command below that you will run using a terminal window on your local machine)
 
 ```
 scp studentX@212.87.6.113:~/illumina/*.html localdirectory
@@ -74,7 +74,7 @@ scp studentX@212.87.6.113:~/illumina/*.html localdirectory
 
 #### 3. Activating the QIIME 2 environment
 
-Now you will start working in QIIME 2 environment.
+Now you will start working in the QIIME 2 environment.
 
 ```
 conda activate qiime2
@@ -83,7 +83,7 @@ conda activate qiime2
 
 #### 4. Importing data
 
-First step is to import your `.fastq` files to a special `.qza` artifacts file.
+The first step is to import your `.fastq` files to a special `.qza` artifacts file.
 
 ```
 qiime tools import --type "SampleData[PairedEndSequencesWithQuality]" --input-format PairedEndFastqManifestPhred33V2 --input-path ./manifest.tsv --output-path ./demultiplexed-seqs.qza
