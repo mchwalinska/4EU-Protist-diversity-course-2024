@@ -36,7 +36,13 @@ First, download the repository from GitHub to your computer, unzip and then navi
 
 ```
 scp -r scripts studentX@212.87.6.113:~
-``` 
+```
+
+Make all the Python scripts executable.
+
+```
+chmod a+x ./scripts/*.py
+```
 
 In the next step create two folders and enter the folder illumina for the first part of the analysis:
 
@@ -280,12 +286,23 @@ for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info
 
 #### 5. Extracting 18S rDNA sequences
 
-Using [Barrnap](https://github.com/tseemann/barrnap) extract rDNA fragments from your reads. But first change `filtlong.fastq` to `filtlong.fasta` using `sed` command.
+[Barrnap](https://github.com/tseemann/barrnap) software is used to extract rDNA fragments from the reads. Unfortunately it is very slow, so I had to run it before, and you will just copy the output to the proper folders.
 
 ```
-for folder in *; do sed -n '1~4s/^@/>/p;2~4p' "$folder"/filtlong.fastq > "$folder"/filtlong.fasta; done
-for folder in *; do barrnap --kingdom euk --reject 0.1 --outseq "$folder"/barrnap.fasta "$folder"/filtlong.fasta --threads 4; done
+# Copy barrnap.fasta separaetly for your two samples 
+cp ../../4UProtistDiversity/barrnap/yoursamplename/barrnap.fasta ./yoursamplename
 ```
+
+<details>
+  <summary>Here is what command to use if you want to run it yourself</summary>
+
+  Before running it change `filtlong.fastq` to `filtlong.fasta` using `sed` command.
+
+  ```
+  for folder in *; do sed -n '1~4s/^@/>/p;2~4p' "$folder"/filtlong.fastq > "$folder"/filtlong.fasta; done
+  for folder in *; do barrnap --kingdom euk --reject 0.1 --outseq "$folder"/barrnap.fasta "$folder"/filtlong.fasta --threads 4; done
+  ```
+</details>
 
 ***How many different rDNA fragments did you obtain?***
 
@@ -383,7 +400,7 @@ Download `taxonomy_table.tsv` to your computer.
 In this step you will use Python scripts to calculate OTUs abundance (based on abundance in clusters) and create final OTU table.
 
 ```
-for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(basename "$folder"); ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../4UProtistDiversity/merging_nanopore/"$folder"/clusters_error -b "$folder" -o "abundance_${folder_name}.tsv"; done
+for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(basename "$folder"); ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../../4UProtistDiversity/merging_nanopore/${folder_name}/clusters_error -b "$folder" -o "abundance_${folder_name}.tsv"; done
 ../script/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
 ```
 
