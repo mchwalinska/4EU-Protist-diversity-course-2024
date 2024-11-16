@@ -143,7 +143,7 @@ Again upload files on the [QIIME2View](https://view.qiime2.org) website and ives
 
 ***What % of your reads merged successfully?***
 
-Additionally, when reviewing the representative sequences you have obtained (`representative_sequences.qzv`), download them from the QIIME2View website in FASTA format. 
+Additionally, when reviewing the representative sequences (your ASVs) you have obtained (`representative_sequences.qzv`), download them from the QIIME2View website in FASTA format. 
 
 <details>
   <summary>Help here</summary>
@@ -157,7 +157,7 @@ Additionally, when reviewing the representative sequences you have obtained (`re
 
 #### 9. Exporting files
 
-To assign taxonomy for further diversity analysis, you need to download two files: `ASV table` and `representative sequences` (your ASVs).
+To assign taxonomy for further diversity analysis, you need to download two files: `ASV table` (table.qza) and `representative sequences` in a fasta format.
 
 OTU table needs to be exported using QIIME2:
 
