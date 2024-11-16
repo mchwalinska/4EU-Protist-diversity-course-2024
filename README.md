@@ -159,7 +159,7 @@ Additionally, when reviewing the representative sequences (your ASVs) you have o
 
 To assign taxonomy for further diversity analysis, you need to download two files: `ASV table` (table.qza) and `representative sequences` in a fasta format.
 
-OTU table needs to be exported using QIIME2:
+To read the feature table, which represents your ASVs table, you need to export it using QIIME2:
 
 ```
 qiime tools export --input-path dada2/table.qza --output-path exported
@@ -173,7 +173,7 @@ Download `feature-table.tsv` to your computer.
 
 #### 10. Taxonomic annotation
 
-You will assign taxonomy using the [VSEARCH](https://github.com/torognes/vsearch) software, which uses global alignment method. For reference you will use the [PR2](https://pr2-database.org) database.
+You will assign taxonomy using the [VSEARCH](https://github.com/torognes/vsearch) software, which uses the global alignment method. For reference, you will use the [PR2](https://pr2-database.org) database.
 
 ```
 vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
@@ -184,7 +184,7 @@ vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database
 
 #### 11. Modifying outputs
 
-Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and change the name in cell A2 from `#OTU` ID to `OTU` and save changes.
+Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and change the name in cell A2 from `#OTU` ID to `OTU` and save the changes.
 
 <details>
   <summary>Help here</summary>
