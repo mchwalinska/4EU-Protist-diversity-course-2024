@@ -182,7 +182,7 @@ vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database
 ***Which other databases and methods of assigning taxonomy do you know?***
 
 
-#### 11. Modifying outputs
+#### 11. Modifying outputs for diversity analyses 
 
 Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and change the name in cell A2 from `#OTU` ID to `OTU` and save the changes.
 
@@ -192,7 +192,7 @@ Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and chan
   ![Description of the image](imgs/table.png)
 </details>
 
-***What is this file showing us?***
+***What information does this file contain?***
 
 
 Using Python script you will modify `taxonomy.tsv`
@@ -202,11 +202,11 @@ Using Python script you will modify `taxonomy.tsv`
 ```
 
 <details>
-  <summary>In the case of permission denided error</summary>
+  <summary>In the case of permission denied error</summary>
 
-  In some cases scripts will run, only after changing their permission rules.
+  In some cases, scripts will run, only after changing their permission rules.
 
-  You can easliy fix it by navigating to the 'scripts' folder and set new permissions.
+  You can easily fix it by navigating to the 'scripts' folder and setting new permissions.
 
   ```
 chmod 777 *
@@ -214,14 +214,14 @@ chmod 777 *
 </details>
 
 
-Download taxonomy_table.tsv to your computer and open in Excel.
+Download taxonomy_table.tsv to your computer and open it in Excel. Examine the file. 
 ***Which taxa are the most present in your samples?***
 
 #### !!! <ins>FINAL OUTCOMES</ins> !!!
 
 Congratulations! You've just finished the first part of today's data analysis!
-As a final outputs you obtained:
-* `feature-table.tsv` - table of ASVs abundances
+As a final outputs, you obtained:
+* `feature-table.tsv` - table of ASV abundances
 * `taxonomy_table.tsv` - table of taxonomy for each ASV
 
 
