@@ -143,7 +143,7 @@ Again upload files on the [QIIME2View](https://view.qiime2.org) website and ives
 
 ***What % of your reads merged successfully?***
 
-Additionally, when reviewing the representative sequences you have obtained (representative_sequences.qzv), download them from the QIIME2View website in FASTA format. 
+Additionally, when reviewing the representative sequences you have obtained (`representative_sequences.qzv`), download them from the QIIME2View website in FASTA format. 
 
 <details>
   <summary>Help here</summary>
