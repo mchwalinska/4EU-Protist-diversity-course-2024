@@ -214,8 +214,9 @@ chmod 777 *
 </details>
 
 
-Download taxonomy_table.tsv to your computer and open it in Excel. Examine the file. 
-***Which taxa are the most present in your samples?***
+Download taxonomy_table.tsv to your computer and open it in Excel. Take a look at the data to determine which taxa are present.
+
+***Which taxa are most represented in your samples?***
 
 #### !!! <ins>FINAL OUTCOMES</ins> !!!
 
