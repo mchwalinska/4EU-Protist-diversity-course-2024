@@ -21,7 +21,7 @@ Table of Contents
 
 ### Introduction
 
-During the first day of the data analysis part of the 4EU-Protist-diversity course, you will work mostly in the terminal. You will use bioinformatic softwares installed in [conda](https://anaconda.org/anaconda/conda) package management system. Some steps will require you to activate conda environment with the command `conda activate environment_name`. To leave the environment you type `conda deactivate`.
+On the first day of the data analysis part of the 4EU-Protist-diversity course, you'll primarily work in the terminal. You will use bioinformatic software installed in [conda](https://anaconda.org/anaconda/conda) package management system. Certain steps will require you to activate conda environment with the command `conda activate environment_name`. To exit the environment, simply type `conda deactivate`.
 
 To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform with special plugins.
 
