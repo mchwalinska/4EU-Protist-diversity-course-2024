@@ -32,7 +32,7 @@ To analyse Illumina data you will use the [QIIME2](https://qiime2.org) platform
 
 #### 1. Downloading scripts and preparing working environment
 
-First, download the repository to your computer, unzip and then navigate to unzipped directory. Next upload the folder 'scripts' to your home folder on the server using the command below (or other solution that works on your system)
+First, download the repository from GitHub to your computer, unzip and then navigate to unzipped directory. Next, upload the folder 'scripts' to your home folder on the server using the command below (or other solution that works on your system)
 
 ```
 scp -r scripts studentX@212.87.6.113:~
