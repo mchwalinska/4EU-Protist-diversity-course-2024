@@ -106,6 +106,7 @@ qiime demux summarize --i-data trimmed_demux.qza --o-visualization trimmed_demux
 ```
 
 Download `trimmed_demux.qzv` on your computer and upload the file on the [QIIME2View](https://view.qiime2.org) website.
+
 ***Investigate both tabs***.
 
 
