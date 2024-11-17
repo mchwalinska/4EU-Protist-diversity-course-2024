@@ -239,9 +239,9 @@ As a final outputs, you obtained:
 
 #### 1. Copying data
 
-For the second part of the day folder `nanopore` will become your working directory.
+For the second part of the day, set the nanopore folder as your working directory.
 
-First, copy your two samples to your working directory.
+Start by copying your two sample files into the working directory. Refer to the Excel spreadsheet shared on Slack to check the sample names.
 
 ```
 cp ../../4UProtistDiversity/raw_nanopore/sample_name .
