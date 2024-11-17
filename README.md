@@ -251,7 +251,8 @@ cp ../../4UProtistDiversity/raw_nanopore/sample_name .
 #### 2. Quality check
 
 For nanopore data we will use two softwares to check the quality, already known FastQC and [NanoPlot](https://github.com/wdecoster/NanoPlot). 
-The first command puts your samples in separate folders.
+
+The first command puts your samples in separate folders. Following comands will be run over the folders in a [loop](https://runcloud.io/blog/bash-for-loop) executing fastqc or NanoPlot tools.
 
 ```
 for file in *.fastq; do folder_name="${file%.fastq}"; mkdir -p "$folder_name"; mv "$file" "$folder_name"; done
@@ -260,11 +261,11 @@ conda activate nanopore
 for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_raw ; done
 ```
 
-Again download the `.html` file to your computer and open it in the browser. 
+Again download the `.html` fastqc outputs located in folders to your computer and open it in the browser. 
 
 ***Do you see the difference with Illumina data?***
 
-NanoPlot produces a lot of outputs. One of them is general statistics `NanoStats.txt`. The other ones are plots. Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect.
+NanoPlot produces a lot of outputs! One of them is general statistics `NanoStats.txt`. The other ones are plots. Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect.
 
 ***Which of those two software is better for nanopore data and why?*** 
 
