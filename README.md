@@ -291,7 +291,7 @@ for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info
 
 #### 5. Extracting 18S rDNA sequences
 
-[Barrnap](https://github.com/tseemann/barrnap) software extracts rDNA fragments from the reads. Unfortunately, it runs very slowly, so to save time, we ran it beforehand. You will simply copy the output to the appropriate folders.
+[Barrnap](https://github.com/tseemann/barrnap) software extracts rDNA fragments from the reads. Unfortunately, it runs very slowly considering the massive amount of data that you got, so to save time, we ran it beforehand. You will simply copy the barrnap output to the appropriate folders.
 
 ```
 # Copy barrnap.fasta separately for your two samples 
@@ -344,7 +344,7 @@ vsearch --cluster_fast <folder>/18S_extracted.fasta -id <clustering value> --clu
 
 #### 8. Polishing
 
-Polishing is an important step of working with nanopore data, as it improves read quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs sequence correction.
+Polishing is an important step of working with nanopore data, as it improves read quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs the sequence correction.
 
 ```
 for folder in *; do minimap2 "$folder"/centroids_error.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
@@ -382,7 +382,7 @@ vsearch --uchime_ref merged_seqs.fasta --db /mnt/databases/pr2_db/pr2_database-5
 
 #### 11. Final clustering
 
-To obtain your final Operational Taxonomic Units (OTUs) you need to cluster together identital sequences from all the samples.
+To obtain your final Operational Taxonomic Units (OTUs) you need to cluster together nearly identital sequences from all the samples.
 
 ```
 mkdir clusters_final
@@ -392,7 +392,7 @@ vsearch --cluster_fast merged_nonchim_seqs.fasta  -id 0.99 --clusters clusters_f
 
 #### 12. Taxonomic annotation
 
-You will assign taxonomy and modify the output in the same way you did for illumina. 
+You will assign the taxonomy and modify the output in the same way you did for illumina data. 
 
 ```
 vsearch --usearch_global otus.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.0.fasta --blast6out taxonomy.tsv --id 0.70
@@ -410,7 +410,7 @@ for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(base
 ../script/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
 ```
 
-Download `otu_table.tsv` to your computer.
+Download `otu_table.tsv` to your computer and take a look!.
 
 
 #### !!! <ins>FINAL OUTCOMES</ins> !!!
