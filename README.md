@@ -330,19 +330,20 @@ for folder in *; do echo "$folder"; ../scripts/clustering_treshold_calculations.
 
 #### 7. Clustering
 
-Previously you used VSEARCH to assign taxonomy. However this software has many more functions and clustering is one of them.
+
+Previously, you used VSEARCH to assign taxonomy. However, this software offers many additional functions, and we will now use it for clustering reads.
 
 ```
 for folder in *; do mkdir "$folder"/clusters_error; done
 
-# Run the command below separately for your two samples. Remember to setup you folder name and id (eg. -id 0.975)
-vsearch --cluster_fast <folder>/18S_extracted.fasta -id <your error> --clusters <folder>/clusters_error/cluster_ --centroids <folder>/centroids_error.fasta 
+# Run the command below separately for your two samples. Remember to set your folder name and clustering value from the previous step -id (eg. -id 0.975)
+vsearch --cluster_fast <folder>/18S_extracted.fasta -id <clustering value> --clusters <folder>/clusters_error/cluster_ --centroids <folder>/centroids_error.fasta 
 ```
 
 
 #### 8. Polishing
 
-Polishing is an important step of working with nanopore data, as it's improving reads quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs sequence correction.
+Polishing is an important step of working with nanopore data, as it improves read quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs sequence correction.
 
 ```
 for folder in *; do minimap2 "$folder"/centroids_error.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
