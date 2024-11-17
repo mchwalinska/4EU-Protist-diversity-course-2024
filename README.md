@@ -407,7 +407,7 @@ In this step you will use Python scripts to calculate OTUs abundance (based on t
 
 ```
 for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(basename "$folder"); ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../../4UProtistDiversity/merging_nanopore/${folder_name}/clusters_error -b "$folder" -o "abundance_${folder_name}.tsv"; done
-../scripts/create_nanopore_otu_table.py -t taxonomy.tsv -i abun/ -o otu_table.tsv
+../scripts/create_nanopore_otu_table.py -t taxonomy.tsv -i ./ -o otu_table.tsv
 ```
 
 Download `otu_table.tsv` to your computer and take a look!.
