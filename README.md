@@ -421,7 +421,7 @@ As a final outputs you obtained:
 * `taxonomy_table.tsv` - table of taxonomy for each OTU
 
 
-
+$${\color{red}If \space you \space \space want \space to \space use \space our \space scripts \space or \space pipeline, \space please \space cite \space this \space repository. \space Also \space the \space paper \space is \space on \space the \space way! \space :)}$$
 
 
 
