@@ -331,8 +331,7 @@ for folder in *; do echo "$folder"; ../scripts/clustering_treshold_calculations.
 
 #### 7. Clustering
 
-
-Previously, you used VSEARCH to assign taxonomy. However, this software offers many additional functions, and we will now use it for clustering reads.
+Previously analyzing Ilumina data, you used VSEARCH to assign the taxonomy. However, this software offers many additional functions! Now, we are gonna use it for clustering the reads.
 
 ```
 for folder in *; do mkdir "$folder"/clusters_error; done
@@ -363,7 +362,7 @@ for folder in *; do ../scripts/add_names.py -i "$folder"/racon.fasta -b "$folder
 ```
 
 Next copy your whole sample folder to the folder `../../4UProtistDiversity/merging_nanopore`.
-Finally merge polshed and renamed sequences together.
+Finally merge polished and renamed sequences together.
 
 ```
 cat ../../4UProtistDiversity/merging_nanopore/*/racon_* > merged_seqs.fasta
@@ -404,7 +403,7 @@ Download `taxonomy_table.tsv` to your computer.
 
 #### 13. Abundance calculations
 
-In this step you will use Python scripts to calculate OTUs abundance (based on abundance in clusters) and create final OTU table.
+In this step you will use Python scripts to calculate OTUs abundance (based on the number of reads in clusters) and create final OTU table.
 
 ```
 for folder in ../../4UProtistDiversity/merging_nanopore/*; do folder_name=$(basename "$folder"); ../scripts/abundance.py -otu otus.fasta -fclu clusters_final -bclu ../../4UProtistDiversity/merging_nanopore/${folder_name}/clusters_error -b "$folder" -o "abundance_${folder_name}.tsv"; done
