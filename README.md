@@ -271,7 +271,7 @@ NanoPlot produces a lot of outputs. One of them is general statistics `NanoStat
 
 #### 3. Length and quality filtering
 
-Using [Filtlong](https://github.com/rrwick/Filtlong) to filter reads by length and quality.
+We will use [Filtlong](https://github.com/rrwick/Filtlong) to filter reads by length and quality.
 
 ```
 for folder in *; do filtlong --min_length 2000 --max_length 6000  --min_mean_q 90  "$folder"/*.fastq > "$folder"/filtlong.fastq; done
@@ -279,21 +279,21 @@ for folder in *; do filtlong --min_length 2000 --max_length 6000  --min_mean_q 9
 
 #### 4. Comparing quality after filtering
 
-Again perform quality check.
+Again perform a quality check after filtering.
 
 ```
 for folder in *; do fastqc "$folder"/filtlong.fastq; done
 for folder in *; do NanoPlot --fastq "$folder"/filtlong.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_filtered ; done
 ```
-***Compare the results to non-filtered reads (step 2). What differences do you see?***
+***Compare the obtained results with the non-filtered reads from step 2. What differences can you observe?***
 
 
 #### 5. Extracting 18S rDNA sequences
 
-[Barrnap](https://github.com/tseemann/barrnap) software is used to extract rDNA fragments from the reads. Unfortunately it is very slow, so I had to run it before, and you will just copy the output to the proper folders.
+[Barrnap](https://github.com/tseemann/barrnap) software extracts rDNA fragments from the reads. Unfortunately, it runs very slowly, so to save time, we ran it beforehand. You will simply copy the output to the appropriate folders.
 
 ```
-# Copy barrnap.fasta separaetly for your two samples 
+# Copy barrnap.fasta separately for your two samples 
 cp ../../4UProtistDiversity/barrnap/yoursamplename/barrnap.fasta ./yoursamplename
 ```
 
@@ -308,20 +308,20 @@ cp ../../4UProtistDiversity/barrnap/yoursamplename/barrnap.fasta ./yoursamplenam
   ```
 </details>
 
-***How many different rDNA fragments did you obtain?***
+***How many different rDNA parts did you obtain?***
 
-Using Python script you will keep only fragments of 18S rDNA for further analysis.
+Using Python script you will keep only 18S rDNA for further analysis.
 
 ```
 for folder in *; do ../scripts/extracting_18S.py -i "$folder"/barrnap.fasta -o "$folder"/18S_extracted.fasta; done
 ```
 
-***Do you know why we chose to focus only on 18S rDNA?***
+***Do you know why we decided to focus solely on the 18S rDNA?***
 
 
-#### 6. Getting average reads quality
+#### 6. Getting average read quality
 
-For the next step, you need to calculate average read quality for each sample. Python script reclaculates Phred scale quality provided by NanoPlot to quality in percentage values.
+For the next step, you need to calculate the average read quality for each sample. Python script recalculates the Phred scale quality provided by NanoPlot to quality in percentage values.
 
 ```
 for folder in *; do echo "$folder"; ../scripts/clustering_treshold_calculations.py -s "$folder"/nanoplot_filtered/NanoStats.txt -e ../scripts/P_error_table.tsv; done
