@@ -337,6 +337,7 @@ Previously, you used VSEARCH to assign taxonomy. However, this software offers m
 for folder in *; do mkdir "$folder"/clusters_error; done
 
 # Run the command below separately for your two samples. Remember to set your folder name and clustering value from the previous step -id (eg. -id 0.975)
+
 vsearch --cluster_fast <folder>/18S_extracted.fasta -id <clustering value> --clusters <folder>/clusters_error/cluster_ --centroids <folder>/centroids_error.fasta 
 ```
 
