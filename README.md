@@ -241,7 +241,7 @@ As a final outputs, you obtained:
 
 For the second part of the day, set the nanopore folder as your working directory.
 
-Start by copying your two sample files into the working directory. Refer to the Excel spreadsheet shared on Slack to check the sample names.
+Start by copying your two sample files into the working directory. To check the sample names, refer to the Excel spreadsheet shared on Slack.
 
 ```
 cp ../../4UProtistDiversity/raw_nanopore/sample_name .
@@ -251,7 +251,7 @@ cp ../../4UProtistDiversity/raw_nanopore/sample_name .
 #### 2. Quality check
 
 For nanopore data we will use two softwares to check the quality, already known FastQC and [NanoPlot](https://github.com/wdecoster/NanoPlot). 
-The first command puts your samples to separate folders.
+The first command puts your samples in separate folders.
 
 ```
 for file in *.fastq; do folder_name="${file%.fastq}"; mkdir -p "$folder_name"; mv "$file" "$folder_name"; done
@@ -260,9 +260,13 @@ conda activate nanopore
 for folder in *; do NanoPlot --fastq "$folder"/*.fastq --tsv_stats --info_in_report -o "$folder"/nanoplot_raw ; done
 ```
 
-Again download the `.html` file to your computer and open it in the browser. ***Do you see the difference with illumina dada?***
+Again download the `.html` file to your computer and open it in the browser. 
+
+***Do you see the difference with Illumina data?***
+
 NanoPlot produces a lot of outputs. One of them is general statistics `NanoStats.txt`. The other ones are plots. Download to your computer two of them `LengthvsQualityScatterPlot_dot.png` and `Non_weightedHistogramReadlength.png` and inspect.
-***Which of those two softwares is better for nanopore data and why?*** 
+
+***Which of those two software is better for nanopore data and why?*** 
 
 
 #### 3. Length and quality filtering
