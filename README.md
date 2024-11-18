@@ -190,7 +190,7 @@ vsearch --usearch_global sequences.fasta --db /mnt/databases/pr2_db/pr2_database
 
 #### 11. Modifying outputs for diversity analyses 
 
-Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and change the name in cell A2 from `#OTU` ID to `OTU` and save the changes.
+Open the downloaded `feature-table.tsv` in Excel, remove the first raw, and change the name in cell A2 from `#OTU ID` to `OTU` and save the changes.
 
 <details>
   <summary>Help here</summary>
