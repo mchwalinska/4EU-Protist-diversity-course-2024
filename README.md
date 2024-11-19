@@ -342,7 +342,7 @@ vsearch --cluster_fast <folder>/18S_extracted.fasta -id <clustering value> --clu
 ```
 
 
-### 8. Clusters filtering
+#### 8. Clusters filtering
 
 VSEARCH gave big number of clusters which contain only one sequence (singletons), which will become computational problem in the next steps. So, in the next step you will get rid of clusters which don't have minimum 3 sequences.
 
