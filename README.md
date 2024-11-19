@@ -342,17 +342,26 @@ vsearch --cluster_fast <folder>/18S_extracted.fasta -id <clustering value> --clu
 ```
 
 
-#### 8. Polishing
+### 8. Clusters filtering
+
+VSEARCH gave big number of clusters which contain only one sequence (singletons), which will become computational problem in the next steps. So, in the next step you will get rid of clusters which don't have minimum 3 sequences.
+
+```
+for folder in *; do cp ../scripts/reduce_abundance.py "$folder"; cd "$folder"; ./reduce_abundance.py; cd ../; done
+```
+
+
+#### 9. Polishing
 
 Polishing is an important step of working with nanopore data, as it improves read quality. You will use two softwares [Minimap2](https://github.com/lh3/minimap2) for mapping centroids to sequences before clustering and [Racon](https://github.com/isovic/racon) which performs the sequence correction.
 
 ```
-for folder in *; do minimap2 "$folder"/centroids_error.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
-for folder in *; do racon "$folder"/18S_extracted.fasta -q 20 -w 500 "$folder"/minimap2.paf "$folder"/centroids_error.fasta > "$folder"/racon.fasta; done
+for folder in *; do minimap2 "$folder"/centroids_error_filt.fasta "$folder"/18S_extracted.fasta > "$folder"/minimap2.paf; done
+for folder in *; do racon "$folder"/18S_extracted.fasta -q 20 -w 500 "$folder"/minimap2.paf "$folder"/centroids_error_filt.fasta > "$folder"/racon.fasta; done
 ```
 
 
-#### 9. Merging samples
+#### 10. Merging samples
 
 For next step you will need to work on all the samples.
 First using Python script add sample names to the headers of your polished sequences.
@@ -369,7 +378,7 @@ cat ../../4UProtistDiversity/merging_nanopore/*/racon_* > merged_seqs.fasta
 ```
 
 
-#### 10. Chimeras removal
+#### 11. Chimeras removal
 
 Here you will again use VSEARCH, but this time to remove chimeric sequences.
 
@@ -380,7 +389,7 @@ vsearch --uchime_ref merged_seqs.fasta --db /mnt/databases/pr2_db/pr2_database-5
 ***What % of sequences turned out to be chimeric? Is it more or less than in case of illumina?***
 
 
-#### 11. Final clustering
+#### 12. Final clustering
 
 To obtain your final Operational Taxonomic Units (OTUs) you need to cluster together nearly identital sequences from all the samples.
 
@@ -390,7 +399,7 @@ vsearch --cluster_fast merged_nonchim_seqs.fasta  -id 0.99 --clusters clusters_f
 ```
 
 
-#### 12. Taxonomic annotation
+#### 13. Taxonomic annotation
 
 You will assign the taxonomy and modify the output in the same way you did for illumina data. 
 
@@ -401,7 +410,7 @@ vsearch --usearch_global otus.fasta --db /mnt/databases/pr2_db/pr2_database-5.0.
 Download `taxonomy_table.tsv` to your computer.
 
 
-#### 13. Abundance calculations
+#### 14. Abundance calculations
 
 In this step you will use Python scripts to calculate OTUs abundance (based on the number of reads in clusters) and create final OTU table.
 
