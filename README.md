@@ -6,11 +6,11 @@ This is a step-by-step instruction for the bioinformatic part of the course.
 <!--- TOC START -->
 Table of Contents
 -----------------
-- [Day-1-From-Reads-to-Taxa](#Day-1)
+- [Day-1-From-Reads-to-Taxa](#Day-1-From-Reads-to-Taxa)
   - [Introduction](#Introduction)
   - [Illumina](#Illumina)
   - [Nanopore](#Nanopore)
-- [Day-2-From-Taxa-to-Diversity](#Day-2)
+- [Day-2-From-Taxa-to-Diversity](#Day-2-From-Taxa-to-Diversity)
   - [Introduction](#Introduction)
   - [RStudio-and-libraries-installation](#RStudio-and-libraries-installation)
   - [Analysis](#Analysis)
