@@ -11,6 +11,9 @@ Table of Contents
   - [Illumina](#Illumina)
   - [Nanopore](#Nanopore)
 - [Day-2-From-Taxa-to-Diversity](#Day-2)
+  - [Introduction](#Introduction)
+  - [RStudio-and-libraries-installation](#RStudio-and-libraries-installation)
+  - [Analysis](#Analysis)
 <!--- TOC END -->
 
 
