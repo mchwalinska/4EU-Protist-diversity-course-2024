@@ -437,4 +437,43 @@ $${\color{red}If \space you \space \space want \space to \space use \space our \
 ## DAY 2 - From Taxa to Diversity
 
 
+### Introduction
+
+During this part you will use your OTU and taxonomy tables and metadata table to perform different statistical analysis. You will work in [RStudio](https://posit.co/download/rstudio-desktop/) and use R programming language to analyse your data.
+
+
+### RStudio and libraries installation
+
+#### 1. RStudio
+
+[Here](https://swirlstats.com/students.html), you will find the instruction to install R and RStudio.
+
+
+#### 2. Libraries
+
+Download the listed libraries.
+
+* vegan
+* readxl
+* dplyr
+* FactoMineR
+* factoextra
+* ggplot2
+* tidyverse
+* bestNormalize
+* psych
+* rstatix
+* corrplot
+* readr
+
+
+### Analysis
+
+Open file `20241119.09.07.Praha.Rmd.R` in RStudio.
+
+
+
+
+
+
 
